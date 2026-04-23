@@ -6,6 +6,14 @@ title: "Pedrógão Grande Reburn Susceptibility Application"
 
 This project develops a Google Earth Engine application for policymakers and wildfire planners to assess **reburn susceptibility** within the 2017 Pedrógão Grande fire footprint in central Portugal. The model identifies which 100 m cells are most likely to reburn before the 2026 fire season by combining official fire perimeter data with remotely sensed indicators of initial burn severity, post-fire vegetation recovery, current fuel condition, and topographic controls. A Random Forest classifier is used to estimate reburn probability from these predictors, and the final application translates model outputs into interactive maps, municipality summaries, and click-based spatial diagnostics. The platform is intended to support operational prioritisation for fuel reduction and wildfire resilience planning.
 
+### Problem Statement 
+
+The application maps the distribution of re-ignition susceptibility in the affected area of the Great Pedrogan Fire in central Portugal in 2017. Using the flare-up boundary data from 2018 to 2025 provided by the Portuguese National Forest Service (ICNF), the application analyses the correlation between the severity of the fire, post-fire recovery, fuel status in 2025, surface temperature, and the topography and the spatial distribution pattern of the re-ignition. The application aims to support risk prioritisation before the 2026 fire season through an interactive and easy-to-understand interface.
+
+### End User 
+
+The main target user of the tool is AGIF, which is especially suitable for prioritising fuel reduction work in the affected area. The tool is also suitable for other stakeholders involved in post-fire management, who need to check the flammability distribution pattern, explore local predictor values, and understand the output of the model behind the map.
+
 ## Data
 
 | Category | Dataset | Description | Source |
@@ -33,7 +41,45 @@ Model fitting is implemented using a Random Forest classifier in Google Earth En
 
 Model performance is assessed using AUC, Brier score, confusion matrices, accuracy, and kappa. Because the reburn class is relatively rare and the predicted probabilities are compressed into a low range, the final classification threshold is selected using **Youden’s J statistic** rather than a default threshold of 0.5. This provides a more defensible operating point for reporting categorical performance. To support interpretation, the workflow also computes binned partial dependence relationships for key predictors, especially NBR recovery slope and 2017 dNBR, which directly address the project’s substantive questions about recovery trajectory and severity legacy. The continuous reburn probability surface is then converted into a five-class susceptibility product using percentile-based breaks, and municipality-level summaries are derived to support policy-oriented prioritisation.
 
+```{mermaid}
+flowchart LR
+    subgraph L1["🔴 Legacy effects"]
+        A[dNBR 2017\nBurn severity]
+    end
 
+    subgraph L2["🟢 Ecological recovery"]
+        B[NBR slope\n2018–2020 trend]
+        C[NBR offset\nRecovery intercept]
+    end
+
+    subgraph L3["🟡 Current fuel state"]
+        D[NDVI 2025\nVegetation cover]
+        E[NDMI min 2025\nFuel moisture]
+        F[LST max 2025\nSurface temperature]
+    end
+
+    subgraph L4["🔵 Topographic control"]
+        G[Elevation]
+        H[Aspect]
+    end
+
+    LABEL[ICNF reburn labels\nBinary 0/1 · 2018–2025]
+
+    RF["Random Forest\n100 trees · spatial holdout"]
+
+    A --> RF
+    B --> RF
+    C --> RF
+    D --> RF
+    E --> RF
+    F --> RF
+    G --> RF
+    H --> RF
+    LABEL --> RF
+
+    RF --> PROB[Reburn probability\n0–1]
+    RF --> CLASS[5-class map\nQuantile breaks]
+```
 
 
 ## Interface
