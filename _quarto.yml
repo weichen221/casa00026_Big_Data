@@ -1,8 +1,3 @@
-# =========================
-# _quarto.yml
-# Put this file in project root
-# =========================
-
 project:
   type: website
   output-dir: docs
@@ -15,42 +10,7 @@ website:
   navbar:
     right:
       - icon: github
-        href: https://github.com/
-      - text: Live App
-        href: https://exalted-country-485019-c8.projects.earthengine.app/view/pedrogao-reburn
-
-  sidebar:
-    style: docked
-    collapse-level: 2
-    search: true
-    contents:
-      - href: index.qmd
-        text: Home
-
-      - section: "Contents"
-        contents:
-          - href: index.qmd#project-summary
-            text: Project Summary
-          - href: index.qmd#problem-statement
-            text: Problem Statement
-          - href: index.qmd#end-user
-            text: End User
-          - href: index.qmd#study-area
-            text: Study Area
-          - href: index.qmd#data
-            text: Data
-          - href: index.qmd#methodology
-            text: Methodology
-          - href: index.qmd#interface
-            text: Interface
-          - href: index.qmd#the-application
-            text: The Application
-          - href: index.qmd#how-it-works
-            text: How It Works
-          - href: index.qmd#limitations-and-future-development
-            text: Limitations
-          - href: index.qmd#references
-            text: References
+        href: https://github.com/weichen221/casa00026_Big_Data
 
 format:
   html:
@@ -58,7 +18,7 @@ format:
       light: united
       dark: superhero
     toc: true
-    toc-depth: 4
+    toc-depth: 3
     toc-location: right
     page-layout: full
     smooth-scroll: true
@@ -67,6 +27,13 @@ format:
     number-sections: true
     link-external-newwindow: true
     css: styles.css
+    title-block-banner: images/hero-bg.jpg
+    title-block-banner-color: white
+    grid:
+      sidebar-width: 0px
+      margin-width: 420px
+      body-width: 1500px
+      gutter-width: 1rem
 
 execute:
   echo: false
